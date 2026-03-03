@@ -1,0 +1,85 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-cli:
+    name: Build CLI - ${{ matrix.platform.name }}
+    runs-on: ${{ matrix.platform.os }}
+    strategy:
+      matrix:
+        platform:
+          - name: Windows
+            os: windows-latest
+            bin_name: ionyx-win.exe
+            target: x86_64-pc-windows-msvc
+          - name: macOS-x64
+            os: macos-latest
+            bin_name: ionyx-macos-x64
+            target: x86_64-apple-darwin
+          - name: macOS-arm64
+            os: macos-latest
+            bin_name: ionyx-macos-arm64
+            target: aarch64-apple-darwin
+          - name: Linux-x64
+            os: ubuntu-latest
+            bin_name: ionyx-linux-x64
+            target: x86_64-unknown-linux-gnu
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform.target }}
+
+      - name: Build Binary
+        run: |
+          cd ionyx-cli
+          cargo build --release --target ${{ matrix.platform.target }}
+
+      - name: Rename and Prepare Archeology
+        shell: bash
+        run: |
+          mkdir -p bin
+          if [ "${{ matrix.platform.os }}" = "windows-latest" ]; then
+            cp ionyx-cli/target/${{ matrix.platform.target }}/release/ionyx.exe bin/${{ matrix.platform.bin_name }}
+          else
+            cp ionyx-cli/target/${{ matrix.platform.target }}/release/ionyx bin/${{ matrix.platform.bin_name }}
+          fi
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bin-${{ matrix.platform.bin_name }}
+          path: bin/${{ matrix.platform.bin_name }}
+
+  publish-npm:
+    needs: build-cli
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Download all binaries
+        uses: actions/download-artifact@v4
+        with:
+          path: bin/
+          merge-multiple: true
+
+      - name: Verify binaries
+        run: ls -R bin/
+
+      - name: Publish to NPM
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

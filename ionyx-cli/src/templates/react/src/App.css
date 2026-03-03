@@ -1,0 +1,75 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+.App {
+  text-align: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.App-header {
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.App-header h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.app-info {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin: 1.5rem 0;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.app-info p {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.features {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 12px;
+  margin: 1.5rem 0;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.features h2 {
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.features ul {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.features li {
+  padding: 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+p {
+  margin-top: 2rem;
+  opacity: 0.8;
+}

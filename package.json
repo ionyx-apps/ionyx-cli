@@ -1,0 +1,45 @@
+{
+  "name": "ionyx",
+  "version": "1.0.5",
+  "description": "Universal desktop framework with Rust backend and agnostic frontend",
+  "main": "index.js",
+  "scripts": {
+    "ionyx": "node bin/index.js",
+    "dev": "node bin/index.js dev",
+    "build": "node bin/index.js build",
+    "create": "node bin/index.js create",
+    "build:cli": "cd ionyx-cli && cargo build --release",
+    "test": "node test-framework.js"
+  },
+  "bin": {
+    "create-ionyx-app": "bin/index.js",
+    "ionyx": "bin/index.js"
+  },
+  "files": [
+    "bin/",
+    "ionyx-cli/src/templates"
+  ],
+  "keywords": [
+    "desktop",
+    "framework",
+    "rust",
+    "tao",
+    "wry",
+    "cross-platform",
+    "ionyx",
+    "create-ionyx-app",
+    "cli",
+    "tauri-alternative"
+  ],
+  "author": "Ionyx Apps <info@ionyx.app>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ionyx-apps/ionyx-cli.git"
+  },
+  "homepage": "https://ionyx.app",
+  "bugs": {
+    "url": "https://github.com/ionyx-apps/ionyx/issues"
+  },
+  "dependencies": {}
+}
