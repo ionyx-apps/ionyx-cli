@@ -40,6 +40,14 @@ const args = process.argv.slice(2);
 const scriptPath = process.argv[1];
 const scriptName = path.basename(scriptPath);
 
+// Version handling
+if (args.includes('--version') || args.includes('-v')) {
+    const pkgPath = path.join(__dirname, '..', 'package.json');
+    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+    console.log(`Ionyx CLI v${pkg.version} (Stable Binary Wrapper)`);
+    process.exit(0);
+}
+
 // Default to 'create' if called via npx create-ionyx-app or npx ionyx without args
 if ((scriptName === 'create-ionyx-app' || scriptName === 'index.js') && args.length === 0) {
     args.push('create');
