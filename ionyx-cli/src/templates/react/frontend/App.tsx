@@ -1,3 +1,11 @@
+declare global {
+  interface Window {
+    ionyx: {
+      invoke: (args: { command: string; payload?: any }) => Promise<any>;
+    };
+  }
+}
+
 import { useState, useEffect } from "react"
 import "./App.css"
 
@@ -9,7 +17,7 @@ function App() {
     // Test IPC communication
     const testIPC = async () => {
       try {
-        const info = await window.ionyx.invoke("app.getVersion")
+        const info = await window.ionyx.invoke({ command: "app.getVersion" })
         setAppInfo(info)
         setMessage("Hello from Ionyx Framework! 🚀")
       } catch (error) {

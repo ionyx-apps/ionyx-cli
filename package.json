@@ -1,6 +1,6 @@
 {
   "name": "ionyx",
-  "version": "1.1.15",
+  "version": "1.1.28",
   "description": "Universal desktop framework with Rust backend and agnostic frontend - CLI tool",
   "main": "index.js",
   "scripts": {

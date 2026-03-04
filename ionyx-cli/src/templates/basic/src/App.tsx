@@ -1,3 +1,11 @@
+declare global {
+  interface Window {
+    ionyx: {
+      invoke: (args: { command: string; payload?: any }) => Promise<any>;
+    };
+  }
+}
+
 import { useState } from "react"
 import "./App.css"
 

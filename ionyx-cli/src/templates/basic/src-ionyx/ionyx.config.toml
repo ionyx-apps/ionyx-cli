@@ -1,0 +1,21 @@
+[app]
+name = "Ionyx App"
+version = "1.0.0"
+
+[window]
+title = "Ionyx Application"
+width = 1200
+height = 800
+resizable = true
+fullscreen = false
+
+[permissions]
+filesystem = ["./app-data"]
+network = true
+os_info = true
+dialogs = true
+
+[development]
+port = 5173
+auto_reload = true
+open_devtools = false

@@ -1,18 +1,15 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "module": "ESNext",
     "moduleResolution": "Node",
-    "jsx": "react-jsx",
     "strict": true,
+    "jsx": "preserve",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "allowJs": true,
-    "noEmit": true,
-    "isolatedModules": true
+    "lib": ["ESNext", "DOM", "DOM.Iterable"]
   },
-  "include": ["**/*"], 
+  "include": ["**/*.ts", "**/*.js", "**/*.svelte", "**/*.d.ts"],
   "exclude": ["node_modules"]
 }

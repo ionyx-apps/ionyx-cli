@@ -1,15 +1,28 @@
-// Ionyx IPC setup
+// Ionyx IPC Bridge JavaScript
 window.ionyx = {
   invoke: (command, payload = {}) => {
     return new Promise((resolve, reject) => {
-      const id = Math.random().toString(36).substr(2, 9)
-      const request = { id, command, payload }
+      // Generate unique ID with timestamp and random
+      const id = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}_${command}`
+      const request = {
+        id,
+        command,
+        payload: payload || {}
+      }
       
       console.log("🚀 Sending IPC request:", request)
       
+      // Store the resolve/reject functions for this request
+      const timeoutId = setTimeout(() => {
+        console.error("❌ IPC request timeout for:", command)
+        reject(new Error("IPC request timeout"))
+      }, 15000)
+      
+      // Store handler (in a real app, you would use a Map)
       window.ionyx.resolveResponse = (responseId, response) => {
         if (responseId === id) {
           console.log("📥 Received IPC response:", response)
+          clearTimeout(timeoutId)
           if (response.success) {
             resolve(response.data)
           } else {
@@ -31,17 +44,4 @@ window.ionyx = {
   resolveResponse: () => {}
 }
 
-// Test IPC communication
-async function testConnection() {
-  try {
-    const info = await window.ionyx.invoke("app.getVersion")
-    document.getElementById("app-name").textContent = info.name
-    document.getElementById("app-version").textContent = info.version
-    document.getElementById("status").textContent = "Connected to Ionyx Framework! 🚀"
-  } catch (error) {
-    document.getElementById("status").textContent = "Error connecting to backend"
-    console.error("IPC Error:", error)
-  }
-}
-
-testConnection()
+console.log("🔧 Ionyx IPC Bridge initialized")
