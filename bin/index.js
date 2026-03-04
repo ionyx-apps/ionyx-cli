@@ -9,7 +9,13 @@ const fs = require('fs');
  * Uses bundled binary - no Rust/Cargo required!
  */
 
-const args = process.argv.slice(2);
+let args = process.argv.slice(2);
+
+// Handle npx create-ionyx-app <name> command
+if (args.length === 1 && args[0] !== 'dev' && args[0] !== 'build' && args[0] !== 'create' && args[0] !== 'run') {
+    // Assume it's a project name for create command
+    args = ['create', args[0]];
+}
 
 // Get platform-specific binary path
 function getBinaryPath() {
@@ -19,11 +25,11 @@ function getBinaryPath() {
 
     let binaryName;
     if (platform === 'win32') {
-        binaryName = 'cargo-ionyx-win.exe';
+        binaryName = 'cargo-ionyx.exe';
     } else if (platform === 'linux') {
-        binaryName = arch === 'x64' ? 'cargo-ionyx-linux-x64' : 'cargo-ionyx-linux-arm64';
+        binaryName = 'cargo-ionyx';
     } else if (platform === 'darwin') {
-        binaryName = arch === 'x64' ? 'cargo-ionyx-macos-x64' : 'cargo-ionyx-macos-arm64';
+        binaryName = 'cargo-ionyx';
     } else {
         throw new Error(`Unsupported platform: ${platform}-${arch}`);
     }
