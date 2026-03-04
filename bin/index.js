@@ -19,11 +19,11 @@ function getBinaryPath() {
 
     let binaryName;
     if (platform === 'win32') {
-        binaryName = 'ionyx-win.exe';
+        binaryName = 'cargo-ionyx-win.exe';
     } else if (platform === 'linux') {
-        binaryName = arch === 'x64' ? 'ionyx-linux-x64' : 'ionyx-linux-arm64';
+        binaryName = arch === 'x64' ? 'cargo-ionyx-linux-x64' : 'cargo-ionyx-linux-arm64';
     } else if (platform === 'darwin') {
-        binaryName = arch === 'x64' ? 'ionyx-macos-x64' : 'ionyx-macos-arm64';
+        binaryName = arch === 'x64' ? 'cargo-ionyx-macos-x64' : 'cargo-ionyx-macos-arm64';
     } else {
         throw new Error(`Unsupported platform: ${platform}-${arch}`);
     }
