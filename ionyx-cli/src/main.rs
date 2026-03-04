@@ -31,7 +31,7 @@ enum Commands {
         #[arg(short, long, default_value = "5173")]
         port: u16,
         /// Hot reload
-        #[arg(short, long)]
+        #[arg(short = 'H', long)]
         hot: bool,
     },
     /// Build the project
