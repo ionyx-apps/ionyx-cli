@@ -52,7 +52,7 @@ This application includes:
 
 ## 📚 Learn More
 
-- [Ionyx Framework Documentation](https://github.com/ionyx-framework/ionyx)
+- [Ionyx Framework Documentation](https://github.com/ionyx-apps/ionyx)
 - [Vite Documentation](https://vitejs.dev/)
 
 ## 🤝 Contributing
