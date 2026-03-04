@@ -4,7 +4,7 @@
 
 [![Ionyx Framework](https://img.shields.io/badge/Ionyx-Framework-blue?style=flat-square&logo=)](https://img.shields.io/badge/Ionyx-Framework-blue?style=flat-square&logo=)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://img.shields.io/badge/License-MIT-green.svg)
-[![npm version](https://img.shields.io/npm/v/create-ionyx-app.svg)](https://www.npmjs.com/package/create-ionyx-app)
+[![npm version](https://img.shields.io/npm/v/ionyx.svg)](https://www.npmjs.com/package/ionyx)
 [![Rust](https://img.shields.io/badge/rust-orange.svg)](https://www.rust-lang.org/)
 [![Node.js](https://img.shields.io/badge/node.js-green.svg)](https://nodejs.org/)
 
