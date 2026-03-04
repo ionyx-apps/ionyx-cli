@@ -1,64 +1,42 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
+const { spawn } = require('child_process');
 const path = require('path');
-const { spawnSync } = require('child_process');
 
 /**
- * Stable Ionyx CLI Binary Wrapper
- * This script detects the host platform and executes the bundled pre-compiled binary.
- * It no longer attempts to build from source at runtime.
+ * Ionyx CLI Wrapper
+ * Now uses the new Rust CLI instead of bundled binaries
  */
 
-const platform = process.platform;
-const arch = process.arch;
-
-// Determine the correct binary name based on platform
-let binaryName = 'ionyx';
-if (platform === 'win32') {
-    binaryName = 'ionyx-win.exe';
-} else if (platform === 'darwin') {
-    binaryName = arch === 'arm64' ? 'ionyx-macos-arm64' : 'ionyx-macos-x64';
-} else if (platform === 'linux') {
-    binaryName = arch === 'arm64' ? 'ionyx-linux-arm64' : 'ionyx-linux-x64';
-}
-
-const binaryPath = path.join(__dirname, binaryName);
-
-// Check if the binary exists in the package
-if (!fs.existsSync(binaryPath)) {
-    console.error(`\n❌ Ionyx CLI Error: Unsupported platform or binary missing.`);
-    console.error(`   Platform: ${platform}-${arch}`);
-    console.error(`   Expected path: ${binaryPath}\n`);
-    console.error(`Please ensure you have installed the correct version of the 'ionyx' package.`);
-    console.error(`If you are a developer, make sure to compile the binaries and place them in the 'bin/' folder before publishing.`);
-    process.exit(1);
-}
-
-// Execution
 const args = process.argv.slice(2);
-const scriptPath = process.argv[1];
-const scriptName = path.basename(scriptPath);
+const command = args[0] || 'dev';
 
-// Version handling
-if (args.includes('--version') || args.includes('-v')) {
-    const pkgPath = path.join(__dirname, '..', 'package.json');
-    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
-    console.log(`Ionyx CLI v${pkg.version} (Stable Binary Wrapper)`);
-    process.exit(0);
+// Convert npm-style commands to cargo
+const cargoArgs = ['run', '--bin', 'ionyx'];
+
+if (command === 'dev' || command === 'build' || command === 'create' || command === 'run') {
+    cargoArgs.push(command);
+    // Add remaining args
+    cargoArgs.push(...args.slice(1));
+} else {
+    // Default to dev
+    cargoArgs.push('dev');
 }
 
-// Default to 'create' if called via npx create-ionyx-app or npx ionyx without args
-if ((scriptName === 'create-ionyx-app' || scriptName === 'index.js') && args.length === 0) {
-    args.push('create');
-} else if (scriptName === 'create-ionyx-app' && args.length > 0 && args[0] !== 'create') {
-    args.unshift('create');
-}
+console.log(`🚀 Starting Ionyx CLI: cargo ${cargoArgs.join(' ')}`);
 
-const result = spawnSync(binaryPath, args, {
+const cargo = spawn('cargo', cargoArgs, {
     stdio: 'inherit',
-    shell: false,
-    windowsHide: true
+    cwd: process.cwd(),
+    env: { ...process.env, FORCE_COLOR: '1' }
 });
 
-process.exit(result.status || 0);
+cargo.on('exit', (code) => {
+    process.exit(code);
+});
+
+cargo.on('error', (err) => {
+    console.error('❌ Failed to start Ionyx CLI:', err.message);
+    console.error('💡 Make sure Rust and Cargo are installed: https://rustup.rs');
+    process.exit(1);
+});

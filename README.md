@@ -6,47 +6,94 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://img.shields.io/badge/License-MIT-green.svg)
 [![npm version](https://img.shields.io/npm/v/ionyx.svg)](https://www.npmjs.com/package/ionyx)
 [![Rust](https://img.shields.io/badge/rust-orange.svg)](https://www.rust-lang.org/)
-[![Node.js](https://img.shields.io/badge/node.js-green.svg)](https://nodejs.org/)
+[![Cargo](https://img.shields.io/badge/cargo-orange.svg)](https://doc.rust-lang.org/cargo/)
 
 Ionyx Framework, Rust backend ve frontend-agnostik yapı ile modern masaüstü uygulamaları geliştirmek için tasarlanmış, Tauri ve Electron seviyesinde bir framework'tür.
 
 ## 🚀 Hızlı Başlangıç
 
+### Gereksinimler
+
+- **Rust**: [rustup.rs](https://rustup.rs) ile kurun
+- **Node.js**: [nodejs.org](https://nodejs.org) ile kurun (v16+)
+- **Cargo**: Rust ile birlikte gelir
+
 ### Kurulum
+
 ```bash
-# Global kurulum (önerilir)
+# NPM ile kurulum
 npm install -g ionyx
 
-# Yeni proje oluştur (Global kuruluysa)
-ionyx create my-app
-
-# Veya npx ile direkt kullanım
-npx ionyx create my-app
+# Veya Cargo ile (önerilir)
+cargo install ionyx
 ```
 
 ### Proje Oluşturma
+
 ```bash
-# React + TypeScript
-npm create ionyx-app my-react-app --template react
+# Yeni Ionyx projesi oluştur
+ionyx create my-app
 
-# Svelte + TypeScript
-npm create ionyx-app my-svelte-app --template svelte
-
-# Vue + TypeScript
-npm create ionyx-app my-vue-app --template vue
-
-# Vanilla JavaScript
-npm create ionyx-app my-vanilla-app --template vanilla
-
-# Rust + Leptos (WASM)
-npm create ionyx-app my-rust-app --template leptos
+# Veya template ile
+ionyx create my-app --template react
 ```
 
 ### Geliştirme
+
 ```bash
-cd your-app
-npm run ionyx-dev
+cd my-app
+
+# Development server başlat
+ionyx dev
+
+# Veya npm script ile
+npm run dev
 ```
+
+## 🏗️ Mimari
+
+Ionyx, dört ana bileşenden oluşan minimalist bir mimari kullanır:
+
+- **🦀 Rust Backend**: WRY WebView + TAO Windowing
+- **⚡ CLI Tool**: Process orchestration ve environment management  
+- **🌐 Frontend Agnostic**: React, Vue, Svelte, Vanilla JS
+- **📦 Build System**: Cargo ile native compilation
+
+### Özellikler
+
+- ✅ **Sub-2MB** binary boyutu
+- ✅ **<30ms** başlatma süresi  
+- ✅ **Memory safe** Rust backend
+- ✅ **Cross-platform**: Windows, macOS, Linux
+- ✅ **Frontend agnostic**: İstediğiniz framework'ü kullanın
+
+## 📚 Dokümantasyon
+
+- [Website](https://ionyx.app)
+- [Architecture Guide](https://ionyx.app/architecture)
+- [API Reference](https://ionyx.app/docs)
+
+## 🤝 Katkıda Bulunma
+
+1. Fork edin
+2. Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
+3. Commit edin (`git commit -m 'Add amazing feature'`)
+4. Push edin (`git push origin feature/amazing-feature`)
+5. Pull Request açın
+
+## 📄 Lisans
+
+Bu proje MIT lisansı altında lisanslanmıştır - detaylar için [LICENSE](LICENSE) dosyasına bakın.
+
+## 🙏 Teşekkürler
+
+- [Tauri](https://tauri.app) - İlham kaynağı
+- [WRY](https://github.com/tauri-apps/wry) - WebView library
+- [TAO](https://github.com/tauri-apps/tao) - Windowing library
+
+---
+
+**Ionyx** - Masaüstü uygulamaları için geleceğin framework'ü 🚀
 
 ### Build ve Dağıtım
 ```bash
