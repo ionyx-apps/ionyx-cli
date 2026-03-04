@@ -2,41 +2,57 @@
 
 const { spawn } = require('child_process');
 const path = require('path');
+const fs = require('fs');
 
 /**
  * Ionyx CLI Wrapper
- * Now uses the new Rust CLI instead of bundled binaries
+ * Uses bundled binary - no Rust/Cargo required!
  */
 
 const args = process.argv.slice(2);
-const command = args[0] || 'dev';
 
-// Convert npm-style commands to cargo
-const cargoArgs = ['run', '--bin', 'ionyx'];
+// Get platform-specific binary path
+function getBinaryPath() {
+    const platform = process.platform;
+    const arch = process.arch;
+    const binDir = path.join(__dirname, '..', 'bin');
 
-if (command === 'dev' || command === 'build' || command === 'create' || command === 'run') {
-    cargoArgs.push(command);
-    // Add remaining args
-    cargoArgs.push(...args.slice(1));
-} else {
-    // Default to dev
-    cargoArgs.push('dev');
+    let binaryName;
+    if (platform === 'win32') {
+        binaryName = 'ionyx-win.exe';
+    } else if (platform === 'linux') {
+        binaryName = arch === 'x64' ? 'ionyx-linux-x64' : 'ionyx-linux-arm64';
+    } else if (platform === 'darwin') {
+        binaryName = arch === 'x64' ? 'ionyx-macos-x64' : 'ionyx-macos-arm64';
+    } else {
+        throw new Error(`Unsupported platform: ${platform}-${arch}`);
+    }
+
+    const binaryPath = path.join(binDir, binaryName);
+
+    if (!fs.existsSync(binaryPath)) {
+        throw new Error(`Binary not found: ${binaryPath}. Please reinstall the package.`);
+    }
+
+    return binaryPath;
 }
 
-console.log(`🚀 Starting Ionyx CLI: cargo ${cargoArgs.join(' ')}`);
+const binaryPath = getBinaryPath();
 
-const cargo = spawn('cargo', cargoArgs, {
+console.log(`🚀 Starting Ionyx CLI: ${path.basename(binaryPath)} ${args.join(' ')}`);
+
+const child = spawn(binaryPath, args, {
     stdio: 'inherit',
     cwd: process.cwd(),
     env: { ...process.env, FORCE_COLOR: '1' }
 });
 
-cargo.on('exit', (code) => {
+child.on('exit', (code) => {
     process.exit(code);
 });
 
-cargo.on('error', (err) => {
+child.on('error', (err) => {
     console.error('❌ Failed to start Ionyx CLI:', err.message);
-    console.error('💡 Make sure Rust and Cargo are installed: https://rustup.rs');
+    console.error('💡 Please report this issue: https://github.com/ionyx-framework/ionyx/issues');
     process.exit(1);
 });
