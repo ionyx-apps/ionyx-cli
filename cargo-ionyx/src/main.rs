@@ -114,7 +114,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 if path.is_dir() {
                     fs::create_dir_all(&target_path)?;
                 } else {
-                    fs::copy(path, &target_path)?;
+                    if path.file_name().unwrap() == "package.json" {
+                        let content = fs::read_to_string(path)?;
+                        let new_content = content.replace("{{PROJECT_NAME}}", &project_name);
+                        fs::write(&target_path, new_content)?;
+                    } else {
+                        fs::copy(path, &target_path)?;
+                    }
                 }
             }
 

@@ -46,7 +46,7 @@ fn main() -> Result<()> {
     // Create application
     let mut app = Application::new()
         .with_window(|window| {
-            let window_builder = WindowBuilder::new()
+            let window_builder = window
                 .with_title(&config.window.title)
                 .with_inner_size(config.window.width, config.window.height)
                 .with_resizable(config.window.resizable)
@@ -70,31 +70,20 @@ fn main() -> Result<()> {
             window_builder.with_webview(webview_builder)
         });
 
-        // Store webview reference
-        let webview_ref = app.run(|event, _, control_flow| {
-            match event {
-                UserEvent::JavaScript(js_code) => {
-                    if let Some(ref mut webview) = *webview.lock() {
-                        debug!("Executing JavaScript: {}", js_code);
-                        if let Err(e) = webview.evaluate_script(&js_code) {
-                            error!("Failed to execute JavaScript: {}", e);
-                        }
+    // Run the event loop
+    app.run(|event, _, control_flow| {
+        match event {
+            UserEvent::JavaScript(js_code) => {
+                if let Some(ref mut webview) = *webview.lock() {
+                    debug!("Executing JavaScript: {}", js_code);
+                    if let Err(e) = webview.evaluate_script(&js_code) {
+                        error!("Failed to execute JavaScript: {}", e);
                     }
                 }
-                _ => {}
             }
-            });
-
-        // Store webview reference after creation
-        if let Some(webview) = webview_ref {
-            *webview.lock() = Some(webview);
+            _ => {}
         }
-
-        webview_ref
     });
-
-    // Run the event loop
-    event_loop.run()?;
 
     Ok(())
 }
