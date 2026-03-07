@@ -1,35 +1,3 @@
-// Ionyx IPC setup
-window.ionyx = {
-  invoke: (command, payload = {}) => {
-    return new Promise((resolve, reject) => {
-      const id = Math.random().toString(36).substr(2, 9)
-      const request = { id, command, payload }
-      
-      console.log("🚀 Sending IPC request:", request)
-      
-      window.ionyx.resolveResponse = (responseId, response) => {
-        if (responseId === id) {
-          console.log("📥 Received IPC response:", response)
-          if (response.success) {
-            resolve(response.data)
-          } else {
-            reject(new Error(response.error))
-          }
-        }
-      }
-      
-      // Send IPC request to Rust backend
-      if (window.ipc) {
-        console.log("📤 Sending via window.ipc.postMessage")
-        window.ipc.postMessage(JSON.stringify(request))
-      } else {
-        console.error("❌ window.ipc not available")
-        reject(new Error("IPC not available"))
-      }
-    })
-  },
-  resolveResponse: () => {}
-}
 
 // Test IPC communication
 async function testConnection() {
@@ -44,4 +12,23 @@ async function testConnection() {
   }
 }
 
+async function checkWebGPU() {
+  const statusEl = document.getElementById("webgpu-status")
+  if (navigator.gpu) {
+    try {
+      const adapter = await navigator.gpu.requestAdapter()
+      if (adapter) {
+        statusEl.textContent = "✅ WebGPU Supported"
+      } else {
+        statusEl.textContent = "❌ WebGPU Not Supported"
+      }
+    } catch (e) {
+      statusEl.textContent = "❌ WebGPU Not Supported"
+    }
+  } else {
+    statusEl.textContent = "❌ WebGPU Not Supported"
+  }
+}
+
 testConnection()
+checkWebGPU()

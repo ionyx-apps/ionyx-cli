@@ -1,10 +1,33 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
+  declare global {
+    interface Window {
+      ionyx: {
+        invoke: (command: string, payload?: any) => Promise<any>;
+      };
+    }
+  }
+
   let message = "Loading Ionyx Framework...";
   let appInfo: any = null;
+  let webGpuSupported: boolean | null = null;
 
   onMount(async () => {
+    // Check WebGPU support
+    const checkWebGPU = async () => {
+      if (navigator.gpu) {
+        try {
+          const adapter = await navigator.gpu.requestAdapter();
+          webGpuSupported = !!adapter;
+        } catch (e) {
+          webGpuSupported = false;
+        }
+      } else {
+        webGpuSupported = false;
+      }
+    };
+
     // Test IPC communication
     try {
       const info = await window.ionyx.invoke("app.getVersion");
@@ -14,6 +37,8 @@
       message = "Error connecting to backend";
       console.error("IPC Error:", error);
     }
+
+    checkWebGPU();
   });
 </script>
 
@@ -37,6 +62,7 @@
       <li>✅ Cross-platform Desktop Apps</li>
       <li>✅ Rust Backend Performance</li>
       <li>✅ Svelte Reactive Frontend</li>
+      <li>{webGpuSupported === true ? "✅ WebGPU Supported" : webGpuSupported === false ? "❌ WebGPU Not Supported" : "⏳ Checking WebGPU..."}</li>
     </ul>
   </div>
   

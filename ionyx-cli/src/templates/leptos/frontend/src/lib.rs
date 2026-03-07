@@ -15,6 +15,7 @@ pub fn App() -> impl IntoView {
                     <li>"✅ Cross-platform Desktop Apps"</li>
                     <li>"✅ Rust Backend Performance"</li>
                     <li>"✅ Rust Frontend (WASM)"</li>
+                    <li>"✅ WebGPU Support Enabled"</li>
                 </ul>
             </div>
             <p>"Edit this file and reload to see changes!"</p>

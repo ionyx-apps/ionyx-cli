@@ -1,6 +1,9 @@
-pub mod create;
-pub mod dev;
 pub mod build;
-pub mod run;
+pub mod bundle;
 pub mod config;
+pub mod dev;
+pub mod doctor;
+pub mod info;
+pub mod init;
 pub mod plugin;
+pub mod run;

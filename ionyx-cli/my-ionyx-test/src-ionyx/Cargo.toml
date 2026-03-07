@@ -1,0 +1,18 @@
+[package]
+name = "my-ionyx-test"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "my-ionyx-test"
+path = "main.rs"
+
+[dependencies]
+ionyx = "1.0.0"
+anyhow = "1.0"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"

@@ -17,8 +17,9 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Create a new Ionyx project
-    Create {
+    /// Initialize a new Ionyx project
+    #[command(alias = "create")]
+    Init {
         /// Project name
         name: Option<String>,
         /// Project template (basic, react, svelte, vue, vanilla, leptos, angular)
@@ -59,6 +60,19 @@ enum Commands {
         #[command(subcommand)]
         action: PluginAction,
     },
+    /// Shows Ionyx environment information
+    Info,
+    /// Bundle the project into a native installer (EXE, MSI, DEB, DMG)
+    Bundle {
+        /// Bundle target platform (windows, macos, linux)
+        #[arg(short, long)]
+        platform: Option<String>,
+        /// Bundle format (nsis, wix, deb, appimage, dmg)
+        #[arg(short, long)]
+        format: Option<String>,
+    },
+    /// Diagnose development environment (Inspired by Flutter Doctor)
+    Doctor,
 }
 
 #[derive(Subcommand)]
@@ -90,7 +104,7 @@ async fn main() -> Result<()> {
     let cli = Cli::parse();
 
     match cli.command {
-        Commands::Create { name, template } => {
+        Commands::Init { name, template } => {
             use dialoguer::{Input, Select};
             use crate::templates::get_available_templates;
 
@@ -115,7 +129,7 @@ async fn main() -> Result<()> {
                 }
             };
 
-            commands::create::execute(final_name, &final_template).await?;
+            commands::init::execute(final_name, &final_template).await?;
         }
         Commands::Dev { port, hot } => {
             commands::dev::execute(port, hot).await?;
@@ -131,6 +145,15 @@ async fn main() -> Result<()> {
         }
         Commands::Plugin { action } => {
             commands::plugin::execute(action).await?;
+        }
+        Commands::Info => {
+            commands::info::execute().await?;
+        }
+        Commands::Bundle { platform, format } => {
+            commands::bundle::execute(platform, format).await?;
+        }
+        Commands::Doctor => {
+            commands::doctor::execute().await?;
         }
     }
 

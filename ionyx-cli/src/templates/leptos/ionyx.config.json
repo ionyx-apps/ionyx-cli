@@ -1,1 +1,29 @@
-{"name": "my-ionyx-app", "version": "1.0.0", "description": "Rust + Leptos (WASM) application with Ionyx Framework", "type": "app", "src": "src", "dist": "dist", "dev": {"port": 5173, "hot": true}, "build": {"target": "web", "assets": "dist", "minify": false}, "ionyx": {"permissions": ["fs", "network", "os_info"], "security": {"allowed_paths": ["./app-data"]}}}
+{
+  "name": "{{PROJECT_NAME}}",
+  "version": "1.0.0",
+  "description": "Ionyx Framework Application",
+  "type": "app",
+  "src": "src",
+  "dist": "dist",
+  "window": {
+    "title": "{{PROJECT_NAME}}",
+    "width": 1200,
+    "height": 800,
+    "icon": "icon.png"
+  },
+  "dev": {
+    "port": 5173,
+    "hot": true
+  },
+  "build": {
+    "target": "web",
+    "assets": "dist",
+    "minify": false
+  },
+  "ionyx": {
+    "permissions": ["fs", "network", "os_info"],
+    "security": {
+      "allowed_paths": ["./app-data"]
+    }
+  }
+}

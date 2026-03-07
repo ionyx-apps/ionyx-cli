@@ -2,13 +2,13 @@
   <div class="app">
     <header class="app-header">
       <h1>{{ message }}</h1>
-      
+
       <div v-if="appInfo" class="app-info">
         <p><strong>App:</strong> {{ appInfo.name }}</p>
         <p><strong>Version:</strong> {{ appInfo.version }}</p>
         <p><strong>Platform:</strong> {{ appInfo.platform }}</p>
       </div>
-      
+
       <div class="features">
         <h2>🚀 Ionyx Framework Features</h2>
         <ul>
@@ -18,12 +18,19 @@
           <li>✅ Cross-platform Desktop Apps</li>
           <li>✅ Rust Backend Performance</li>
           <li>✅ Vue 3 Reactive Frontend</li>
+          <li>
+            {{
+              webGpuSupported === true
+                ? "✅ WebGPU Supported"
+                : webGpuSupported === false
+                  ? "❌ WebGPU Not Supported"
+                  : "⏳ Checking WebGPU..."
+            }}
+          </li>
         </ul>
       </div>
-      
-      <p>
-        Edit <code>src/App.vue</code> and save to reload.
-      </p>
+
+      <p>Edit <code>src/App.vue</code> and save to reload.</p>
     </header>
   </div>
 </template>
@@ -31,10 +38,71 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 
+declare global {
+  interface Window {
+    ionyx: {
+      invoke: (command: string, payload?: any) => Promise<any>;
+      fs: {
+        readFile: (path: string) => Promise<{ content: string }>;
+        writeFile: (
+          path: string,
+          content: string,
+        ) => Promise<{ success: boolean }>;
+        exists: (path: string) => Promise<{ exists: boolean }>;
+        readDir: (path: string) => Promise<{ entries: any[] }>;
+      };
+      os: {
+        info: () => Promise<{
+          platform: string;
+          arch: string;
+          version: string;
+          hostname: string;
+        }>;
+      };
+      dialog: {
+        openFile: () => Promise<{ filePath: string | null }>;
+        saveFile: () => Promise<{ filePath: string | null }>;
+      };
+      app: {
+        getVersion: () => Promise<{ name: string; version: string }>;
+        getConfig: () => Promise<any>;
+      };
+      network: {
+        request: (
+          url: string,
+          method?: string,
+          body?: any,
+        ) => Promise<{ status: number; headers: any; body: string }>;
+      };
+    };
+  }
+
+  interface Navigator {
+    gpu: {
+      requestAdapter(): Promise<any>;
+    };
+  }
+}
+
 const message = ref("Loading Ionyx Framework...");
 const appInfo = ref<any>(null);
+const webGpuSupported = ref<boolean | null>(null);
 
 onMounted(async () => {
+  // Check WebGPU support
+  const checkWebGPU = async () => {
+    if (navigator.gpu) {
+      try {
+        const adapter = await navigator.gpu.requestAdapter();
+        webGpuSupported.value = !!adapter;
+      } catch (e) {
+        webGpuSupported.value = false;
+      }
+    } else {
+      webGpuSupported.value = false;
+    }
+  };
+
   // Test IPC communication
   try {
     const info = await window.ionyx.invoke("app.getVersion");
@@ -44,6 +112,8 @@ onMounted(async () => {
     message.value = "Error connecting to backend";
     console.error("IPC Error:", error);
   }
+
+  checkWebGPU();
 });
 </script>
 
