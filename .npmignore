@@ -1,21 +1,21 @@
 # Exclude development files
-.git
-.github
-node_modules
-target
-src-ionyx/target
-ionyx-cli/target
+.git/
+.github/
+node_modules/
+target/
 *.log
 .DS_Store
 
-# Exclude source code that isn't needed for the CLI to run/build
-# (We keep ionyx-cli source because scripts/ionyx.js builds it if binary is missing)
-frontend/src
-frontend/node_modules
-docs
-ionyx-examples
-my-ionyx-app
+# Exclude source code (embedded in binary)
+ionyx-cli/src/
+!ionyx-cli/src/templates/
 
-# Keep essential parts
-!ionyx-cli/src
-!scripts/ionyx.js
+# Exclude examples and tests
+ionyx-examples/
+test-framework.js
+
+# Ensure bin is included
+!bin/
+!bin/ionyx.js
+!bin/ionyx.exe
+!bin/ionyx
